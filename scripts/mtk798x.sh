@@ -29,7 +29,7 @@ rm -rf feeds/luci/applications/luci-app-adguardhome
 rm -rf feeds/packages/net/adguardhome
 
 
-git clone --depth=1 https://github.com/chicha9009/luci-app-adguardhome.git package//luci-app-adguardhome
+git clone --depth=1 https://github.com/chicha9009/luci-app-adguardhome.git package/luci-app-adguardhome
 git clone --depth=1 https://github.com/chicha9009/adguardhome.git package/adguardhome
 
 
