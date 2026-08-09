@@ -29,27 +29,9 @@ rm -rf feeds/luci/applications/luci-app-adguardhome
 rm -rf feeds/packages/net/adguardhome
 
 
-# Git稀疏克隆，只克隆指定目录到本地
-#function git_sparse_clone() {
-#  local branch="$1"
-#  local repourl="$2"
-#  local repodir
-#  shift 2
-
-#  repodir="$(basename "${repourl%.git}")"
-#  rm -rf "$repodir"
-#  git clone --depth=1 -b "$branch" --single-branch --filter=blob:none --sparse "$repourl" "$repodir"
-#  (
-#    cd "$repodir"
-#    git sparse-checkout set "$@"
-#    mv -f "$@" ../package
-#  )
-#  rm -rf "$repodir"
-#}
-
 git clone --depth=1 https://github.com/chicha9009/luci-app-adguardhome.git feeds/luci/applications/luci-app-adguardhome
 git clone --depth=1 https://github.com/chicha9009/adguardhome.git feeds/packages/net/adguardhome
 
 
-./scripts/feeds update -a
+# ./scripts/feeds update -a
 ./scripts/feeds install -a
