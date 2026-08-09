@@ -21,16 +21,17 @@ sed -i "s#_('Firmware Version'), (L\.isObject(boardinfo\.release) ? boardinfo\.r
             ]),#" "$luci_system_js"
 
 sudo apt install libfuse-dev
-rm -rf feeds/packages/lang/golang
-git clone https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
+
 
 # 删除要替换的包
 rm -rf feeds/luci/applications/luci-app-adguardhome
 rm -rf feeds/packages/net/adguardhome
+rm -rf feeds/packages/lang/golang
 
 
 git clone --depth=1 https://github.com/chicha9009/luci-app-adguardhome.git package/luci-app-adguardhome
 git clone --depth=1 https://github.com/chicha9009/adguardhome.git package/adguardhome
+git clone --depth=1 https://github.com/sbwml/packages_lang_golang -b 26.x package/lang/golang
 
 
 ./scripts/feeds update -a
