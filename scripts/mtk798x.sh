@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 # 修改默认IP & 固件名称 & 编译署名和时间
-sed -i 's/192.168.1.1/192.168.1.254/g' package/base-files/files/bin/config_generate
+# sed -i 's/192.168.1.1/192.168.1.254/g' package/base-files/files/bin/config_generate
 sed -i "s/hostname='.*'/hostname='Openwrt'/g" package/base-files/files/bin/config_generate
 luci_system_js="feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js"
 firmware_version_anchor="_('Firmware Version'), (L.isObject(boardinfo.release) ? boardinfo.release.description + ' / ' : '') + (luciversion || ''),"
@@ -20,34 +20,36 @@ sed -i "s#_('Firmware Version'), (L\.isObject(boardinfo\.release) ? boardinfo\.r
                 }, [ 'Built by 不如吃茶去' ])\n \
             ]),#" "$luci_system_js"
 
-# 删除要替换的包
-rm -rf feeds/luci/applications/luci-app-adguardhome
-
-
 sudo apt install libfuse-dev
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
 
+# 删除要替换的包
+rm -rf feeds/luci/applications/luci-app-adguardhome
+rm -rf feeds/packages/net/adguardhome
+
+
 # Git稀疏克隆，只克隆指定目录到本地
-function git_sparse_clone() {
-  local branch="$1"
-  local repourl="$2"
-  local repodir
-  shift 2
+#function git_sparse_clone() {
+#  local branch="$1"
+#  local repourl="$2"
+#  local repodir
+#  shift 2
 
-  repodir="$(basename "${repourl%.git}")"
-  rm -rf "$repodir"
-  git clone --depth=1 -b "$branch" --single-branch --filter=blob:none --sparse "$repourl" "$repodir"
-  (
-    cd "$repodir"
-    git sparse-checkout set "$@"
-    mv -f "$@" ../package
-  )
-  rm -rf "$repodir"
-}
+#  repodir="$(basename "${repourl%.git}")"
+#  rm -rf "$repodir"
+#  git clone --depth=1 -b "$branch" --single-branch --filter=blob:none --sparse "$repourl" "$repodir"
+#  (
+#    cd "$repodir"
+#    git sparse-checkout set "$@"
+#    mv -f "$@" ../package
+#  )
+#  rm -rf "$repodir"
+#}
 
-git_sparse_clone master https://github.com/kenzok8/openwrt-packages luci-app-adguardhome
-mv -f package/luci-app-adguardhome feeds/luci/applications/luci-app-adguardhome
+git clone --depth=1 https://github.com/chicha9009/luci-app-adguardhome.git feeds/luci/applications/luci-app-adguardhome
+git clone --depth=1 https://github.com/chicha9009/adguardhome.git feeds/packages/net/adguardhome
+
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a

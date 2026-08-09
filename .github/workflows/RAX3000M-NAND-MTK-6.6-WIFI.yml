@@ -227,11 +227,11 @@ jobs:
         body: |
           **This is OpenWrt Firmware for ${{ env.FIRMWARE_TAG }}**
           ### 📒 固件信息
-          - 没有什么杂乱的插件，集成自动重启、diskman、vlmcsd、无科学插件的6.6内核固件
+          - 没有什么杂乱的插件，集成自动重启、diskman、vlmcsd、adguardhome无科学插件的6.6内核固件
           - 💻 这是 ${{ env.FIRMWARE_TAG }} 平台使用的 OpenWrt 固件
           - ⚽ 固件源码: ${{ env.REPO_URL }}
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
-          - 🌐 默认地址: 192.168.1.254
+          - 🌐 默认地址: 192.168.6.1
           - 🔑 默认密码: none
           ### 🧊 固件版本
           - 固件内核版本：${{ env.VERSION_KERNEL }}
