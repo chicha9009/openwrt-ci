@@ -111,7 +111,7 @@ jobs:
       run: |
         cp $CONFIG_FILE $OPENWRT_PATH/.config
         cd $OPENWRT_PATH
-        make defconfig > /dev/null 2>&1
+        make defconfig
         SOURCE_REPO="${REPO_URL##*/}"
         SOURCE_REPO="${SOURCE_REPO%.git}"
         DEVICE_TARGET="$(awk -F '"' '/CONFIG_TARGET_BOARD/ {print $2; exit}' .config)"
