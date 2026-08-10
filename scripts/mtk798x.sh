@@ -33,6 +33,10 @@ git clone --depth=1 https://github.com/chicha9009/luci-app-adguardhome.git packa
 #git clone --depth=1 https://github.com/chicha9009/adguardhome.git package/adguardhome
 git clone https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
 
+echo "========== 检查 package/mtk/applications 目录内容 =========="
+ls -la "$OPENWRT_PATH/package/mtk/applications/"
+echo "=========================================================="
 
-#./scripts/feeds update -a
-#./scripts/feeds install -a
+
+./scripts/feeds update -a
+./scripts/feeds install -a

@@ -128,21 +128,21 @@ jobs:
           echo "CACHE_KEY=$CACHE_KEY"
         } >> "$GITHUB_ENV"
 
-    - name: Cache Toolchain(缓存工具链)
-      if: env.CACHE_TOOLCHAIN == 'true'
-      uses: HiGarfield/cachewrtbuild@main
-      with:
-        ccache: false
-        mixkey: ${{ env.CACHE_PREFIX }}
-        prefix: ${{ env.OPENWRT_PATH }}
+#    - name: Cache Toolchain(缓存工具链)
+#      if: env.CACHE_TOOLCHAIN == 'true'
+#      uses: HiGarfield/cachewrtbuild@main
+#      with:
+#        ccache: false
+#        mixkey: ${{ env.CACHE_PREFIX }}
+#        prefix: ${{ env.OPENWRT_PATH }}
 
-    - name: Refresh The Cache(刷新缓存)
-      run: |
-        if [ -d "$OPENWRT_PATH/staging_dir" ]; then
-          find "$OPENWRT_PATH/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
-            find "$dir" -type f -exec touch {} +
-          done
-        fi
+#   - name: Refresh The Cache(刷新缓存)
+#      run: |
+#       if [ -d "$OPENWRT_PATH/staging_dir" ]; then
+#          find "$OPENWRT_PATH/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
+#            find "$dir" -type f -exec touch {} +
+#          done
+#        fi
 
     - name: Install Feeds(安装feeds)
       run: |
@@ -157,11 +157,6 @@ jobs:
         chmod +x $DIY_SCRIPT
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_SCRIPT
-
-    - name: Setup tmate session for manual config
-      uses: mxschmitt/action-tmate@v3
-      timeout-minutes: 60
-      # if: 条件（按需）
 
     - name: Download DL Package(下载DL软件包)
       run: |
