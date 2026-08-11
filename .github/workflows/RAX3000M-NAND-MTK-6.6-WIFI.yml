@@ -129,21 +129,21 @@ jobs:
           echo "CACHE_KEY=$CACHE_KEY"
         } >> "$GITHUB_ENV"
 
-    - name: Cache Toolchain(缓存工具链)
-      if: env.CACHE_TOOLCHAIN == 'true'
-      uses: HiGarfield/cachewrtbuild@main
-      with:
-        ccache: false
-        mixkey: ${{ env.CACHE_PREFIX }}
-        prefix: ${{ env.OPENWRT_PATH }}
+#    - name: Cache Toolchain(缓存工具链)
+#      if: env.CACHE_TOOLCHAIN == 'true'
+#      uses: HiGarfield/cachewrtbuild@main
+#      with:
+#        ccache: false
+#        mixkey: ${{ env.CACHE_PREFIX }}
+ #       prefix: ${{ env.OPENWRT_PATH }}
 
-    - name: Refresh The Cache(刷新缓存)
-      run: |
-        if [ -d "$OPENWRT_PATH/staging_dir" ]; then
-          find "$OPENWRT_PATH/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
-            find "$dir" -type f -exec touch {} +
-          done
-        fi
+#    - name: Refresh The Cache(刷新缓存)
+#      run: |
+#        if [ -d "$OPENWRT_PATH/staging_dir" ]; then
+#          find "$OPENWRT_PATH/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
+#            find "$dir" -type f -exec touch {} +
+#          done
+#        fi
 
     - name: Install Feeds(安装feeds)
       run: |
@@ -153,8 +153,8 @@ jobs:
   
     - name: Load Custom Configuration(加载自定义配置)
       run: |
-        [ -e files ] && mv files $OPENWRT_PATH/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
+        #[ -e files ] && mv files $OPENWRT_PATH/files
+        #[ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
         chmod +x $DIY_SCRIPT
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_SCRIPT
@@ -165,10 +165,19 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
+    - name: Apply and Validate Configuration (强制应用配置)
+      run: |
+        [ -e $CONFIG_FILE ] && cp $CONFIG_FILE $OPENWRT_PATH/.config
+        # 1. 强制用你的配置文件覆盖
+        cd $OPENWRT_PATH 
+        # 2. 让 OpenWrt 解析并生成最终有效的配置
+        make defconfig
+        # 3. (可选) 打印配置差异以便调试
+        ./scripts/diffconfig.sh
+
     - name: Download DL Package(下载DL软件包)
       run: |
         cd $OPENWRT_PATH
-        make defconfig
         make download -j"$(nproc)"
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
