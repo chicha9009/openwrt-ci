@@ -112,7 +112,7 @@ jobs:
       run: |
         cp $CONFIG_FILE $OPENWRT_PATH/.config
         cd $OPENWRT_PATH
-        make defconfig
+        #make defconfig
         SOURCE_REPO="${REPO_URL##*/}"
         SOURCE_REPO="${SOURCE_REPO%.git}"
         DEVICE_TARGET="$(awk -F '"' '/CONFIG_TARGET_BOARD/ {print $2; exit}' .config)"
@@ -165,18 +165,9 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
-    - name: Apply and Validate Configuration (强制应用配置)
-      run: |
-        [ -e $CONFIG_FILE ] && cp $CONFIG_FILE $OPENWRT_PATH/.config
-        # 1. 强制用你的配置文件覆盖
-        cd $OPENWRT_PATH 
-        # 2. 让 OpenWrt 解析并生成最终有效的配置
-        make defconfig
-        # 3. (可选) 打印配置差异以便调试
-        ./scripts/diffconfig.sh
-
     - name: Download DL Package(下载DL软件包)
       run: |
+        [ -e $CONFIG_FILE ] && cp $CONFIG_FILE $OPENWRT_PATH/.config
         cd $OPENWRT_PATH
         make download -j"$(nproc)"
         find dl -size -1024c -exec ls -l {} \;
