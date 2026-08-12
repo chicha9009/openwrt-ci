@@ -27,11 +27,27 @@ sudo apt install libfuse-dev
 rm -rf feeds/luci/applications/luci-app-adguardhome
 rm -rf feeds/packages/net/adguardhome
 rm -rf feeds/packages/lang/golang
+rm files/etc/banner
+
+cat > files/etc/banner << 'EOF'
+ 
+.___                               __         .__
+|   | _____   _____   ____________/  |______  |  |
+|   |/     \ /     \ /  _ \_  __ \   __\__  \ |  |
+|   |  Y Y  \  Y Y  (  <_> )  | \/|  |  / __ \|  |__
+|___|__|_|  /__|_|  /\____/|__|   |__| (____  /____/
+          \/      \/  BE FREE AND UNAFRAID  \/
+  _______________________________________________
+      ImmortalWrt-798x-24.10 from PadavanOnly
+  _______________________________________________
+
+EOF
 
 
 git clone --depth=1 https://github.com/chicha9009/luci-app-adguardhome.git package/luci-app-adguardhome
 git clone --depth=1 https://github.com/chicha9009/adguardhome.git package/adguardhome
 git clone https://github.com/sbwml/packages_lang_golang -b 26.x feeds/packages/lang/golang
+
 
 
 
